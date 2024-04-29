@@ -89,7 +89,19 @@ contract spu {
     address[] private all_profs;
     uint[] private all_profs_id;
     //------------------------------------- Auxiliary functions --------------------------------------
-
+    function chekRole(address a) private view returns (uint) {
+        if (a == is_admin) {
+            return 1;
+        } else if (ChekIfEmp(msg.sender) == true) {
+            return 2;
+        } else if (ChekIfstudentaddress(msg.sender) == true) {
+            return 3;
+        } else if (ChekIfprofaddress(msg.sender) == true) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
     function ChekIfEmp(address y) public view returns (bool b) {
         uint i = 0;
         while (i < e_counter) {
@@ -216,7 +228,7 @@ contract spu {
             return false;
         }
 
-        if (b[4] != "-" || b[7] != "-") {
+        if (b[4] != "/" || b[7] != "/") {
             return false;
         }
 
