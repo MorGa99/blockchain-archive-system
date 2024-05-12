@@ -202,7 +202,9 @@ contract spu {
             all_profs.push(_address);
         }
     }
-
+    function addaythorizedad(address A) public onlyemp(msg.sender) {
+        authorized.push(A);
+    }
     function view_student(uint id) public view returns (student memory k) {
         if (
             (msg.sender) == is_admin ||
