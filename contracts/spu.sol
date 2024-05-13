@@ -72,19 +72,19 @@ contract spu {
     uint public p_counter = 0;
     uint public e_counter = 0;
 
-    mapping(uint => address) private get_emp;
-    mapping(uint => prof) private get_prof;
-    mapping(uint => student) private get_student;
+    mapping(uint => address) public get_emp;
+    mapping(uint => prof) public get_prof;
+    mapping(uint => student) public get_student;
     mapping(uint => course) public get_course;
 
     address[] public all_employees;
     course[] public spu_courses;
 
-    address[] private all_students;
-    uint[] private all_students_id;
+    address[] public all_students;
+    uint[] public all_students_id;
 
-    address[] private all_profs;
-    uint[] private all_profs_id;
+    address[] public all_profs;
+    uint[] public all_profs_id;
 
     address[] public authorized;
 
