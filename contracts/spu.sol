@@ -71,6 +71,8 @@ contract spu {
     uint public s_counter = 0;
     uint public p_counter = 0;
     uint public e_counter = 0;
+    uint public c_counter = 0;
+    uint public a_counter = 0;
 
     mapping(uint => address) public get_emp;
     mapping(uint => prof) public get_prof;
@@ -91,16 +93,24 @@ contract spu {
     function checkRole(address a) public view returns (uint) {
         if (a == is_admin) {
             return 1;
-        } else if (ChekIfEmp(msg.sender) == true) {
+        } else if (ChekIfEmp(a)) {
             return 2;
-        } else if (
-            ChekIfauthorizedaddress(msg.sender) == true ||
-            ChekIfprofaddress(msg.sender) == true
-        ) {
+        } else if (ChekIfprofaddress(a)) {
             return 3;
-        } else {
+        } else if (ChekIfstudentaddress(a)) {
             return 4;
+        } else {
+            return 5;
         }
+    }
+
+    function ChekIfauhrized(address y) public view returns (bool b) {
+        for (uint i = 0; i < authorized.length; i++) {
+            if (y == authorized[i]) {
+                return true;
+            }
+        }
+        return false;
     }
     function ChekIfEmp(address y) public view returns (bool b) {
         for (uint i = 0; i < all_employees.length; i++) {
@@ -119,7 +129,7 @@ contract spu {
         return false;
     }
 
-    function ChekIfstudentaddress(address x) private view returns (bool b) {
+    function ChekIfstudentaddress(address x) public view returns (bool b) {
         for (uint i = 0; i < all_students.length; i++) {
             if (x == all_students[i]) {
                 return true;
@@ -159,7 +169,7 @@ contract spu {
         uint w_h,
         uint s_id,
         uint _mark
-    ) private {
+    ) public {
         student storage s = get_student[s_id];
         student_courses memory f;
         f.couse_id = course_id;
@@ -204,26 +214,7 @@ contract spu {
     }
     function addaythorizedad(address A) public onlyemp(msg.sender) {
         authorized.push(A);
-    }
-    function view_student(uint id) public view returns (student memory k) {
-        if (
-            (msg.sender) == is_admin ||
-            ChekIfEmp(msg.sender) == true ||
-            (ChekIfstudentaddress(msg.sender) == true &&
-                get_student[id].student_address == (msg.sender)) ||
-            ChekIfprofaddress(msg.sender) == true ||
-            ChekIfauthorizedaddress(msg.sender) == true
-        ) {
-            return get_student[id];
-        } else {
-            student memory v = get_student[id];
-            v.email = "null";
-            v.mobileNumber = "null";
-            v.student_address = 0x0000000000000000000000000000000000000000;
-            v.warnnings = new string[](0);
-            v.all_courses = new student_courses[](0);
-            return v;
-        }
+        a_counter++;
     }
 
     function Add_corse(
@@ -234,12 +225,14 @@ contract spu {
         string memory college
     ) public onlyAdmin(msg.sender) {
         course storage b = get_course[id];
+
         b.id = id;
         b.name = name;
         b.weekly_hour = weekly_hour;
         b.level = level;
         b.college = college;
         spu_courses.push(b);
+        c_counter++;
     }
 
     function add_course_marks(
@@ -249,6 +242,7 @@ contract spu {
         uint _mark
     ) public onlyemp(msg.sender) {
         course storage c = get_course[course_id];
+
         course_grade memory g;
         g.student_id = student_id;
         g.mark = _mark;
@@ -329,6 +323,25 @@ contract spu {
         string memory _warnning
     ) public onlyemp(msg.sender) {
         get_student[_id].warnnings.push(_warnning);
+    }
+
+    function get_Courses_mark(
+        uint _id
+    ) public view returns (course_grade[] memory l) {
+        course_grade[] memory q;
+        q = get_course[_id].students_grades;
+        return q;
+    }
+
+    function get_warnnings(uint _id) public view returns (string[] memory b) {
+        string[] memory e;
+        e = get_student[_id].warnnings;
+        return e;
+    }
+    function get_c_marks(uint _id) public view returns (string[] memory b) {
+        string[] memory e;
+        e = get_student[_id].warnnings;
+        return e;
     }
 
     function Delet_emp(uint n) public onlyAdmin(msg.sender) {
