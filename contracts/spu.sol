@@ -99,12 +99,14 @@ contract spu {
             return 3;
         } else if (ChekIfstudentaddress(a)) {
             return 4;
+        } else if (Chek_If_auhrized(a)) {
+            return 3;
         } else {
             return 5;
         }
     }
 
-    function ChekIfauhrized(address y) public view returns (bool b) {
+    function Chek_If_auhrized(address y) public view returns (bool b) {
         for (uint i = 0; i < authorized.length; i++) {
             if (y == authorized[i]) {
                 return true;
@@ -212,7 +214,7 @@ contract spu {
             all_profs.push(_address);
         }
     }
-    function addaythorizedad(address A) public onlyemp(msg.sender) {
+    function add_authorized_ad(address A) public onlyemp(msg.sender) {
         authorized.push(A);
         a_counter++;
     }
@@ -325,7 +327,7 @@ contract spu {
         get_student[_id].warnnings.push(_warnning);
     }
 
-    function get_Courses_mark(
+    function get_Course_marks(
         uint _id
     ) public view returns (course_grade[] memory l) {
         course_grade[] memory q;
@@ -338,9 +340,11 @@ contract spu {
         e = get_student[_id].warnnings;
         return e;
     }
-    function get_c_marks(uint _id) public view returns (string[] memory b) {
-        string[] memory e;
-        e = get_student[_id].warnnings;
+    function get_student_courses(
+        uint _id
+    ) public view returns (student_courses[] memory b) {
+        student_courses[] memory e;
+        e = get_student[_id].all_courses;
         return e;
     }
 
